@@ -3,6 +3,7 @@
     .tuTextarea {
     opacity: 0;
     position: absolute;
+        z-index: -10;
 }
 </style>
 <BR><div>OTROS CORREOS</div><BR><div id="firma-1"><table cellpadding="0" cellspacing="0" style="width: 443;">
@@ -26403,17 +26404,27 @@
     </div><br>-----------------------
 <br><script>
 function CopyToClipboard(containerid) {
-    if (document.selection) {
-        var range = document.body.createTextRange();
-        range.moveToElementText(document.getElementById(containerid));
-        range.select().createTextRange();
-        document.execCommand("copy");
-    } else if (window.getSelection) {
-        var range = document.createRange();
-        range.selectNode(document.getElementById(containerid));
-        window.getSelection().addRange(range);
-        document.execCommand("copy");
-        alert("Ya fue copiado")
+    var element = document.getElementById(containerid);
+
+    // Crear un rango y seleccionar el contenido del elemento
+    var range = document.createRange();
+    range.selectNodeContents(element);
+    window.getSelection().removeAllRanges(); // Limpiar selecciones previas
+    window.getSelection().addRange(range); // Añadir el rango a la selección
+
+    try {
+        // Intentar copiar el contenido seleccionado
+        var successful = document.execCommand('copy');
+        var msg = successful ? 'Copiado exitosamente!' : 'No se pudo copiar.';
+        console.log(msg); // O mostrar un alerta, según sea necesario
+    } catch (err) {
+        console.log('Error al copiar: ', err);
     }
-}
+
+    // Limpiar la selección después de copiar
+    window.getSelection().removeAllRanges();
+    }
+
+
+
 </script>
